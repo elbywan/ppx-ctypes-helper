@@ -1,0 +1,20 @@
+(executable
+ (name pp)
+ (modules pp)
+ (libraries ppx-ctypes-helper.lib ppxlib ctypes)
+ (preprocess (pps ppx-ctypes-helper.lib)))
+
+(rule
+ (targets struct.actual.ml)
+ (deps (:pp pp.exe) (:input struct.ml))
+ (action (run ./%{pp} -impl %{input} -o %{targets})))
+
+(alias
+ (name runtest)
+ (action (diff struct.expected.ml struct.actual.ml)))
+
+(test
+  (name struct)
+  (modules struct)
+  (libraries ctypes)
+  (preprocess (pps ppx-ctypes-helper.lib)))

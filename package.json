@@ -1,0 +1,36 @@
+{
+  "name": "ppx-ctypes-helper",
+  "version": "0.1.0",
+  "description": "Example Reason Esy Project",
+  "license": "MIT",
+  "esy": {
+    "build": "refmterr dune build -p #{self.name}",
+    "NOTE": "Optional release Section. Customizes result of `esy release`",
+    "release": {
+      "bin": ["Hello"]
+    },
+    "buildEnv": {
+      "ODOC_SYNTAX": "re"
+    }
+  },
+  "scripts": {
+    "test": "dune runtest",
+    "doc": "esy dune build @doc",
+    "clean": "rm -Rf ./_esy && rm -Rf ./_build"
+  },
+  "dependencies": {
+    "@esy-ocaml/reason": "*",
+    "@opam/ctypes": "0.15.1",
+    "@opam/dune": "*",
+    "@opam/integers": "0.3.0",
+    "@opam/ppxlib": "0.9.0",
+    "@reason-native/console": "*",
+    "ocaml": "~4.7.0",
+    "refmterr": "*"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*",
+    "ocaml": "~4.7.0",
+    "@opam/odoc": "*"
+  }
+}

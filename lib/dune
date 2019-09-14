@@ -1,0 +1,7 @@
+(library
+  (name PpxCtypesHelperLib)
+  (flags (-w -40 -w +26))
+  (public_name ppx-ctypes-helper.lib)
+  (kind ppx_rewriter)
+  (preprocess (pps ppxlib.metaquot))
+  (libraries console.lib ppxlib ctypes str base))

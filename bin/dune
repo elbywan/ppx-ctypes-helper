@@ -1,0 +1,4 @@
+(executable
+  (name PpxCtypesHelper)
+  (public_name ppx-ctypes-helper)
+  (libraries ppx-ctypes-helper.lib))

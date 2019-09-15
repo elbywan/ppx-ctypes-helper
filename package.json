@@ -7,7 +7,7 @@
     "build": "refmterr dune build -p #{self.name}",
     "NOTE": "Optional release Section. Customizes result of `esy release`",
     "release": {
-      "bin": ["PpxCtypesHelper"]
+      "bin": ["refmt"]
     },
     "buildEnv": {
       "ODOC_SYNTAX": "re"

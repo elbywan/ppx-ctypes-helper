@@ -181,14 +181,14 @@ module StructureName {
 ```reason
 %enum
 type int_enum =
-    | Ten [@as 10]
+    | [@as 10] Ten
     | One
     | Two
-    | Twenty [@as 20]];
+    | [@as 20] Twenty;
 
 %enum
 type string_enum =
-    | Hello [@as "Hello"]
+    | [@as "Hello"] Hello
     | World;
 ```
 

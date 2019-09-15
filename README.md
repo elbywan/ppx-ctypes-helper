@@ -1,4 +1,8 @@
-# ppx-ctypes-helper
+<h1>
+ppx-ctypes-helper
+&nbsp;
+<img src="https://img.shields.io/npm/v/ppx-ctypes-helper?style=flat-square">
+</h1>
 
 ## Purpose
 

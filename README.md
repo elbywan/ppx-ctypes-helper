@@ -74,6 +74,9 @@ Spaces are allowed between parts.
         enumeration: "ENUM_NAME"
     }
 )
+
+/* Then, simply use it like a ctype view. */
+foreign("function_name", StructureName.view @-> (returning @@ void))
 ```
 
 ##### Ocaml syntax
@@ -170,6 +173,24 @@ module StructureName {
 ```
 
 ### %%enum
+
+In the same fashion, the `%%enum` extension generates converters between an enum and its native value.
+
+#### Syntax
+
+Decorate a variant type with the extension.
+
+This will generate a module of the same name as the type, but fully uppercased and containing a ctypes view.
+Optionally annotate variants with the `@as` decorator to associate a specific value.
+
+By default, enums are associated with integers starting from 0. Use the `@as` annotation to change the inferred type.
+
+Available types:
+
+- string
+- int
+- float
+- char
 
 #### Example
 

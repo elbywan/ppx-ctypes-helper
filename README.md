@@ -49,7 +49,7 @@ Spaces are allowed between parts.
 
 ##### Reasonml syntax
 
-```reasonml
+```reason
 %struct
 (
     "StructureName",
@@ -93,8 +93,8 @@ Spaces are allowed between parts.
 
 ##### Generated code
 
-```reasonml
-Module StructureName {
+```reason
+module StructureName {
   /* Abstract type to specialize the structure. */
   type t;
 
@@ -178,7 +178,7 @@ Module StructureName {
 
 ##### Reasonml syntax
 
-```reasonml
+```reason
 %enum
 type int_enum =
     | Ten [@as 10]

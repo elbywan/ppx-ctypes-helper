@@ -1,13 +1,20 @@
 {
   "name": "ppx-ctypes-helper",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Ppx that helps serializing structures and enums to / from c.",
   "license": "MIT",
+  "files": [
+    "bin",
+    "lib",
+    "ppx-ctypes-helper.opam",
+    "dune-project",
+    "MIT-LICENSE"
+  ],
   "esy": {
     "build": "refmterr dune build -p #{self.name}",
     "NOTE": "Optional release Section. Customizes result of `esy release`",
     "release": {
-      "bin": ["refmt"]
+      "bin": ["PpxCtypesHelper"]
     },
     "buildEnv": {
       "ODOC_SYNTAX": "re"
@@ -16,7 +23,7 @@
   "scripts": {
     "test": "dune runtest",
     "doc": "esy dune build @doc",
-    "clean": "rm -Rf ./_esy && rm -Rf ./_build"
+    "clean": "rm -Rf ./_esy && rm -Rf ./_build && rm -Rf ./_release"
   },
   "dependencies": {
     "@esy-ocaml/reason": "*",

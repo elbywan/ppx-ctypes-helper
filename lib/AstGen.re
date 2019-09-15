@@ -3,10 +3,10 @@ open Helpers;
 
 module StructureAst = {
   type typeRepresentation =
-    | Native(string, int, option(string))
-    | Mapped(string, string, int, option(string))
-    | Structure(string, int, option(string))
-    | Enum(string, int, option(string))
+    | Native(string, int, option(string), bool)
+    | Mapped(string, string, int, option(string), bool)
+    | Structure(string, int, option(string), bool)
+    | Enum(string, int, option(string), bool)
     | Custom(Ppxlib.expression, string);
 
   /* String representation to type representation */
@@ -21,7 +21,7 @@ module StructureAst = {
 
     let stringRepr = Str.matched_group(1, s);
     let arrayRepr =
-      switch (Str.matched_group(3, s)) {
+      switch (Str.matched_group(4, s)) {
       | "[]" => Some("size")
       | s => Some(String.sub(s, 1, (s |> String.length) - 2))
       | exception Not_found => None
@@ -35,50 +35,68 @@ module StructureAst = {
       | exception Not_found => 0 + (hasArrayIndirection ? 1 : 0)
       };
 
+    let optional =
+      switch (Str.matched_group(3, s)) {
+      | s => true
+      | exception Not_found => false
+      };
+
     switch (stringRepr) {
-    | "char" => Native("char", indirections, arrayRepr)
-    | "float" => Native("float", indirections, arrayRepr)
-    | "int" => Native("int", indirections, arrayRepr)
-    | "bool" => Native("bool", indirections, arrayRepr)
-    | "string" => Native("string", indirections, arrayRepr)
-    | "nativeint" => Native("nativeint", indirections, arrayRepr)
-    | "void" => Mapped("void", "unit", indirections, arrayRepr)
-    | "double" => Mapped("double", "float", indirections, arrayRepr)
-    | "ldouble" => Mapped("ldouble", "LDouble.t", indirections, arrayRepr)
-    | "schar" => Mapped("schar", "int", indirections, arrayRepr)
-    | "sint" => Mapped("sint", "int", indirections, arrayRepr)
-    | "short" => Mapped("short", "int", indirections, arrayRepr)
-    | "int8_t" => Mapped("int8_t", "int", indirections, arrayRepr)
-    | "int16_t" => Mapped("int16_t", "int", indirections, arrayRepr)
-    | "camlint" => Mapped("camlint", "int", indirections, arrayRepr)
-    | "int32_t" => Mapped("int32_t", "int32", indirections, arrayRepr)
-    | "int64_t" => Mapped("int64_t", "int64", indirections, arrayRepr)
-    | "complex32" => Mapped("complex32", "Complex.t", indirections, arrayRepr)
-    | "complex64" => Mapped("complex64", "Complex.t", indirections, arrayRepr)
+    | "char" => Native("char", indirections, arrayRepr, optional)
+    | "float" => Native("float", indirections, arrayRepr, optional)
+    | "int" => Native("int", indirections, arrayRepr, optional)
+    | "bool" => Native("bool", indirections, arrayRepr, optional)
+    | "string" => Native("string", indirections, arrayRepr, optional)
+    | "nativeint" => Native("nativeint", indirections, arrayRepr, optional)
+    | "void" => Mapped("void", "unit", indirections, arrayRepr, optional)
+    | "double" => Mapped("double", "float", indirections, arrayRepr, optional)
+    | "ldouble" =>
+      Mapped("ldouble", "LDouble.t", indirections, arrayRepr, optional)
+    | "schar" => Mapped("schar", "int", indirections, arrayRepr, optional)
+    | "sint" => Mapped("sint", "int", indirections, arrayRepr, optional)
+    | "short" => Mapped("short", "int", indirections, arrayRepr, optional)
+    | "int8_t" => Mapped("int8_t", "int", indirections, arrayRepr, optional)
+    | "int16_t" => Mapped("int16_t", "int", indirections, arrayRepr, optional)
+    | "camlint" => Mapped("camlint", "int", indirections, arrayRepr, optional)
+    | "int32_t" =>
+      Mapped("int32_t", "int32", indirections, arrayRepr, optional)
+    | "int64_t" =>
+      Mapped("int64_t", "int64", indirections, arrayRepr, optional)
+    | "complex32" =>
+      Mapped("complex32", "Complex.t", indirections, arrayRepr, optional)
+    | "complex64" =>
+      Mapped("complex64", "Complex.t", indirections, arrayRepr, optional)
     | "complexld" =>
-      Mapped("complexld", "ComplexL.t", indirections, arrayRepr)
-    | "long" => Mapped("long", "Signed.long", indirections, arrayRepr)
-    | "llong" => Mapped("llong", "Signed.llong", indirections, arrayRepr)
-    | "uchar" => Mapped("uchar", "Unsigned.uchar", indirections, arrayRepr)
+      Mapped("complexld", "ComplexL.t", indirections, arrayRepr, optional)
+    | "long" =>
+      Mapped("long", "Signed.long", indirections, arrayRepr, optional)
+    | "llong" =>
+      Mapped("llong", "Signed.llong", indirections, arrayRepr, optional)
+    | "uchar" =>
+      Mapped("uchar", "Unsigned.uchar", indirections, arrayRepr, optional)
     | "uint8_t" =>
-      Mapped("uint8_t", "Unsigned.uint8", indirections, arrayRepr)
+      Mapped("uint8_t", "Unsigned.uint8", indirections, arrayRepr, optional)
     | "uint16_t" =>
-      Mapped("uint16_t", "Unsigned.uint16", indirections, arrayRepr)
+      Mapped("uint16_t", "Unsigned.uint16", indirections, arrayRepr, optional)
     | "uint32_t" =>
-      Mapped("uint32_t", "Unsigned.uint32", indirections, arrayRepr)
+      Mapped("uint32_t", "Unsigned.uint32", indirections, arrayRepr, optional)
     | "uint64_t" =>
-      Mapped("uint64_t", "Unsigned.uint64", indirections, arrayRepr)
-    | "ushort" => Mapped("ushort", "Unsigned.ushort", indirections, arrayRepr)
-    | "uint" => Mapped("uint", "Unsigned.uint", indirections, arrayRepr)
-    | "ulong" => Mapped("ulong", "Unsigned.ulong", indirections, arrayRepr)
-    | "ullong" => Mapped("ullong", "Unsigned.ullong", indirections, arrayRepr)
+      Mapped("uint64_t", "Unsigned.uint64", indirections, arrayRepr, optional)
+    | "ushort" =>
+      Mapped("ushort", "Unsigned.ushort", indirections, arrayRepr, optional)
+    | "uint" =>
+      Mapped("uint", "Unsigned.uint", indirections, arrayRepr, optional)
+    | "ulong" =>
+      Mapped("ulong", "Unsigned.ulong", indirections, arrayRepr, optional)
+    | "ullong" =>
+      Mapped("ullong", "Unsigned.ullong", indirections, arrayRepr, optional)
     | "string_opt" =>
-      Mapped("string_opt", "option.string", indirections, arrayRepr)
+      Mapped("string_opt", "option.string", indirections, arrayRepr, optional)
     | ident =>
       if (Str.string_match(enumPattern, ident, 0)) {
-        Enum(ident, indirections, arrayRepr);
+        Enum(ident, indirections, arrayRepr, optional);
       } else if (Str.string_match(structPattern, ident, 0)) {
-        Structure(ident, indirections, arrayRepr);
+        Structure(ident, indirections, arrayRepr, optional);
       } else {
         Location.raise_errorf(
           "[ppx-ctypes-helper] Cannot coerce type: %s",
@@ -91,34 +109,50 @@ module StructureAst = {
   /* Type representation to field expression */
   let coerceTypeExpression = (~indirectionCoeff=0, loc, typeRepr) => {
     open Ast_builder.Default;
-    let (matchedType, indirections) =
+    let (matchedType, indirections, optional, isArray) =
       switch (typeRepr) {
-      | Native(name, indirections, _) => (
+      | Native(name, indirections, arrayField, optional) => (
           evar(loc, "Ctypes." ++ name),
           indirections,
+          optional,
+          arrayField |> Base.Option.is_some,
         )
-      | Mapped(original, _, indirections, _) => (
+      | Mapped(original, _, indirections, arrayField, optional) => (
           evar(loc, "Ctypes." ++ original),
           indirections,
+          optional,
+          arrayField |> Base.Option.is_some,
         )
-      | Enum(name, indirections, _) => (
+      | Enum(name, indirections, arrayField, optional) => (
           evar(loc, name ++ ".view"),
           indirections,
+          optional,
+          arrayField |> Base.Option.is_some,
         )
-      | Structure(name, indirections, _) => (
+      | Structure(name, indirections, arrayField, optional) => (
           evar(loc, name ++ ".view"),
           indirections,
+          optional,
+          arrayField |> Base.Option.is_some,
         )
       | Custom(_) =>
         Location.raise_errorf("[ppx-ctypes-helper] Coercion error.")
       };
-    let indirections = indirections + indirectionCoeff;
+    let adjustedIndirections = indirections + indirectionCoeff;
 
     let rec applyIndirections = (~i=0, ~acc=matchedType, unit) =>
-      if (i < indirections) {
+      if (i < adjustedIndirections) {
         applyIndirections(
           ~i=i + 1,
-          ~acc=[%expr Ctypes.ptr_opt @@ [%e acc]],
+          ~acc=
+            i == indirections
+            - (isArray ? 2 : 1)
+            && optional
+            || i == indirections
+            - 1
+            && isArray
+              ? [%expr Ctypes.ptr_opt @@ [%e acc]]
+              : [%expr Ctypes.ptr @@ [%e acc]],
           (),
         );
       } else {
@@ -132,25 +166,19 @@ module StructureAst = {
     open Ast_builder.Default;
     open Helpers;
 
-    let rec applyIndirections = (~count=0, typ) =>
+    let rec applyIndirections = (~count=0, ~optional=false, typ) =>
       if (count <= 0) {
         typ;
-      } else {
-        optionOf(
-          loc,
-          ptyp_constr(
-            ~loc,
-            {loc, txt: Ldot(Lident("Ctypes_static"), "ptr")},
-            [typ],
-          ),
-        )
+      } else if (optional) {
+        optionOf(loc, ptrOf(loc, typ))
         |> applyIndirections(~count=count - 1);
+      } else {
+        ptrOf(loc, typ) |> applyIndirections(~count=count - 1);
       };
 
     switch (typeRepr) {
-    /* | Mapped("void", _, _, _) => ptyp_var(~loc, fieldName) */
-    | Mapped(_, name, indirections, arrayVariable)
-    | Native(name, indirections, arrayVariable) =>
+    | Mapped(_, name, indirections, arrayField, optional)
+    | Native(name, indirections, arrayField, optional) =>
       let (identifierTxt, desc) =
         !String.contains(name, '.')
           ? (Lident(name), [])
@@ -170,35 +198,46 @@ module StructureAst = {
           );
       let rawType = ptyp_constr(~loc, {loc, txt: identifierTxt}, desc);
 
-      if (arrayVariable == None) {
-        rawType |> applyIndirections(~count=indirections);
-      } else {
-        arrayOf(loc, rawType |> applyIndirections(~count=indirections - 1));
-      };
-    | Enum(name, indirections, arrayVariable) =>
-      let rawType =
-        ptyp_constr(~loc, {loc, txt: Ldot(Lident(name), "t")}, []);
-      if (arrayVariable == None) {
-        rawType |> applyIndirections(~count=indirections);
-      } else {
-        arrayOf(loc, rawType |> applyIndirections(~count=indirections - 1));
-      };
-    | Structure(name, indirections, arrayVariable) =>
-      let structureViewType =
-        ptyp_constr(~loc, {loc, txt: Ldot(Lident(name), "t_view")}, []);
-
-      if (arrayVariable == None) {
-        if (indirections == 1) {
-          optionOf(loc, structureViewType);
-        } else {
-          structureViewType |> applyIndirections(~count=indirections);
-        };
-      } else if (indirections == 2) {
-        arrayOf(loc, optionOf(loc, structureViewType));
+      if (arrayField == None) {
+        rawType |> applyIndirections(~count=indirections, ~optional);
       } else {
         arrayOf(
           loc,
-          structureViewType |> applyIndirections(~count=indirections - 1),
+          rawType |> applyIndirections(~count=indirections - 1, ~optional),
+        );
+      };
+    | Enum(name, indirections, arrayField, optional) =>
+      let rawType =
+        ptyp_constr(~loc, {loc, txt: Ldot(Lident(name), "t")}, []);
+      if (arrayField == None) {
+        rawType |> applyIndirections(~count=indirections, ~optional);
+      } else {
+        arrayOf(
+          loc,
+          rawType |> applyIndirections(~count=indirections - 1, ~optional),
+        );
+      };
+    | Structure(name, indirections, arrayField, optional) =>
+      let structureViewType =
+        ptyp_constr(~loc, {loc, txt: Ldot(Lident(name), "t_view")}, []);
+
+      if (arrayField == None) {
+        if (indirections == 1) {
+          optional ? optionOf(loc, structureViewType) : structureViewType;
+        } else {
+          structureViewType
+          |> applyIndirections(~count=indirections, ~optional);
+        };
+      } else if (indirections == 2) {
+        arrayOf(
+          loc,
+          optional ? optionOf(loc, structureViewType) : structureViewType,
+        );
+      } else {
+        arrayOf(
+          loc,
+          structureViewType
+          |> applyIndirections(~count=indirections - 1, ~optional),
         );
       };
     | Custom(_, fieldName) =>
@@ -224,12 +263,7 @@ module StructureAst = {
       |> List.fold_left(
            (accu, (fieldName, repr)) => {
              switch (repr) {
-             /* | Mapped("void", _, _, _) => [makePTypeParam(fieldName), ...accu] */
              | Custom(_) => [makePTypeParam(fieldName), ...accu]
-             /* | Enum(name, _, _) => [
-                  makePTypeParam(name |> String.lowercase_ascii),
-                  ...accu,
-                ] */
              | _ => accu
              }
            },
@@ -287,10 +321,10 @@ module StructureAst = {
         fields |> List.find(((name, repr)) => name == arrayField);
 
       switch (arrayFieldTypeRepresentation) {
-      | Mapped(_, "int32", _, None) =>
+      | Mapped(_, "int32", _, None, _) =>
         %expr
         Int32.to_int @@ (cstruct >? [%e evar(loc, arrayField)])
-      | Mapped(_, "int64", _, None) =>
+      | Mapped(_, "int64", _, None, _) =>
         %expr
         Int64.to_int @@ (cstruct >? [%e evar(loc, arrayField)])
       | _ =>
@@ -301,12 +335,18 @@ module StructureAst = {
 
     let makeFieldExpression = (fieldName, typeRepr) => {
       switch (typeRepr) {
-      | Structure(name, 1, None) =>
+      | Structure(name, 1, None, true) =>
+        /* Optional structure pointer - dereferenced as an option*/
         switch%expr (cstruct >? [%e evar(loc, fieldName)]) {
         | None => None
         | Some(ptr) => Some(Ctypes.(!@)(ptr))
         }
-      | Structure(name, 2, Some(arrayField)) =>
+      | Structure(name, 1, None, false) =>
+        /* Structure pointer - forcefully dereferenced */
+        %expr
+        cstruct >? [%e evar(loc, fieldName)] |> Ctypes.(!@)
+      | Structure(name, 2, Some(arrayField), true) =>
+        /* Optional array of structure pointers - dereference array contents */
         switch%expr (cstruct >? [%e evar(loc, fieldName)]) {
         | None => []
         | Some(listPtr) =>
@@ -321,10 +361,22 @@ module StructureAst = {
                )
           )
         }
-      | Native(_, _, arrayRepr)
-      | Mapped(_, _, _, arrayRepr)
-      | Enum(_, _, arrayRepr)
-      | Structure(_, _, arrayRepr) =>
+      | Structure(name, 2, Some(arrayField), false) =>
+        /* Array of structure pointers - forcefully dereference array contents */
+        switch%expr (cstruct >? [%e evar(loc, fieldName)]) {
+        | None => []
+        | Some(listPtr) =>
+          Ctypes.CArray.(
+            to_list(
+              from_ptr(listPtr, [%e makeArraySizeExpr(arrayField, fields)]),
+            )
+            |> List.map(Ctypes.(!@))
+          )
+        }
+      | Native(_, _, arrayRepr, _)
+      | Mapped(_, _, _, arrayRepr, _)
+      | Enum(_, _, arrayRepr, _)
+      | Structure(_, _, arrayRepr, _) =>
         switch (arrayRepr) {
         | None =>
           %expr
@@ -388,7 +440,8 @@ module StructureAst = {
 
     let makeFieldExpression = (structure, fieldName, typeRepr) => {
       switch (typeRepr) {
-      | Structure(name, 1, None) =>
+      | Structure(name, 1, None, true) =>
+        /* Optional structure pointer */
         %expr
         [%e structure]
         >. [%e evar(loc, fieldName)]
@@ -401,7 +454,18 @@ module StructureAst = {
                )
              }
            )
-      | Structure(name, 2, Some(arrayField)) =>
+      | Structure(name, 1, None, false) =>
+        /* Structure pointer */
+        %expr
+        [%e structure]
+        >. [%e evar(loc, fieldName)]
+        >= Ctypes.allocate(
+             [%e evar(loc, name ++ ".view")],
+             [%e getRecordField(fieldName)],
+           )
+
+      | Structure(name, 2, Some(arrayField), true) =>
+        /* Array of optional structure pointers */
         %expr
         [%e structure]
         >. [%e evar(loc, fieldName)]
@@ -433,10 +497,38 @@ module StructureAst = {
                |> Ctypes.CArray.start
              ),
            )
-      | Structure(_, indirections, arrayRepr)
-      | Native(_, indirections, arrayRepr)
-      | Mapped(_, _, indirections, arrayRepr)
-      | Enum(_, indirections, arrayRepr) =>
+      | Structure(name, 2, Some(arrayField), false) =>
+        /* Array of structure pointers */
+        %expr
+        [%e structure]
+        >. [%e evar(loc, fieldName)]
+        >= Ctypes.CArray.(
+             Some(
+               of_list(
+                 [%e
+                   coerceTypeExpression(~indirectionCoeff=-1, loc, typeRepr)
+                 ],
+                 [%e getRecordField(fieldName)]
+                 |> List.map(value =>
+                      Ctypes.allocate(
+                        [%e
+                          coerceTypeExpression(
+                            ~indirectionCoeff=-2,
+                            loc,
+                            typeRepr,
+                          )
+                        ],
+                        value,
+                      )
+                    ),
+               )
+               |> start,
+             )
+           )
+      | Structure(_, indirections, arrayRepr, optional)
+      | Native(_, indirections, arrayRepr, optional)
+      | Mapped(_, _, indirections, arrayRepr, optional)
+      | Enum(_, indirections, arrayRepr, optional) =>
         switch (arrayRepr) {
         | None =>
           %expr

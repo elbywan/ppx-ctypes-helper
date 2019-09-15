@@ -14,8 +14,10 @@
     sizeField = "int";
     character = Ctypes.uchar;
     other_structure = "Test *";
+    other_structure_opt = "Test *?";
     other_structure_list = "Test[]";
     other_structure_ptr_list = "Test*[]";
+    other_structure_ptr_list_opt = "Test *?[]";
     int_enum = "INT_ENUM";
     string_enum = "STRING_ENUM";
 })]

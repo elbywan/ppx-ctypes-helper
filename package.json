@@ -1,13 +1,13 @@
 {
   "name": "ppx-ctypes-helper",
   "version": "0.1.0",
-  "description": "Example Reason Esy Project",
+  "description": "Ppx that helps serializing structures and enums to / from c.",
   "license": "MIT",
   "esy": {
     "build": "refmterr dune build -p #{self.name}",
     "NOTE": "Optional release Section. Customizes result of `esy release`",
     "release": {
-      "bin": ["Hello"]
+      "bin": ["PpxCtypesHelper"]
     },
     "buildEnv": {
       "ODOC_SYNTAX": "re"

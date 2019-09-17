@@ -1,7 +1,9 @@
 <h1>
 ppx-ctypes-helper
 &nbsp;
-<img src="https://img.shields.io/npm/v/ppx-ctypes-helper?style=flat-square">
+<a href="https://www.npmjs.com/package/ppx-ctypes-helper">
+    <img src="https://img.shields.io/npm/v/ppx-ctypes-helper?style=flat-square">
+</a>
 </h1>
 
 ## Purpose

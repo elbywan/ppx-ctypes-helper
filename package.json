@@ -1,6 +1,6 @@
 {
   "name": "ppx-ctypes-helper",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Ppx that helps serializing structures and enums to / from c.",
   "license": "MIT",
   "files": [

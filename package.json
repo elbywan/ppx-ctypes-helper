@@ -32,12 +32,12 @@
     "@opam/integers": "0.3.0",
     "@opam/ppxlib": "0.9.0",
     "@reason-native/console": "*",
-    "ocaml": "~4.7.0",
+    "ocaml": ">=4.2.0 <4.9.0",
     "refmterr": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",
-    "ocaml": "~4.7.0",
+    "ocaml": ">=4.2.0 <4.9.0",
     "@opam/odoc": "*"
   }
 }
